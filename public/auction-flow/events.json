@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "status": "proposed_not_implemented",
+  "contract": [
+    "Нейминг: auction_<объект>_<действие/результат>, lower_snake_case. Это предлагаемое правило, не стандарт production-аналитики Циана.",
+    "Общая схема: schema_version=1, event_id (UUID), occurred_at (UTC ISO 8601), session_id, run_id, flow_id, actor_id (псевдоним, если доступен), role=seller|buyer, screen_id, screen_state, previous_screen_id, listing_id, auction_id (null до публикации), auction_status=draft|active|ended, auction_state_version, environment=prototype|production, is_demo, entry_point. Сейчас эти идентификаторы и события не реализованы.",
+    "Все текущие прогоны environment=prototype и is_demo=true. Отдельно source=user|demo_control|timer. Демо-переключение ролей и искусственные ставки не смешивать с реальным спросом. Для продуктовых метрик фильтр environment=production и is_demo=false; здесь данных для него нет.",
+    "Ставка: bid_flow_id на открытие формы; logical_bid_id на намерение с фиксированной суммой; новый logical_bid_id при её изменении. attempt_id уникален на каждую отправку/повтор; retry сохраняет logical_bid_id и увеличивает attempt_number. bid_id присваивается принятой ставке. Время ожидания считать по каждой попытке.",
+    "Дедупликация по event_id; accepted — дополнительно по bid_id; published и ended — один раз на auction_id + версию перехода. Отказ локальной валидации не считается отправкой. Submit и retry взаимоисключающие для одной попытки.",
+    "screen_view фиксирует вход/смену состояния, не каждую секунду таймера. Для status/history/result использовать порог видимости ≥50% в течение ≥1 с и дедуп по сессии + роли + auction_id + состоянию/версии. B01/B02 — один экран с разной прокруткой; S04/S05 — один экран с разным согласием.",
+    "Денежные параметры — целое число RUB, сроки — часы, latency_ms — миллисекунды, пустой результат — final_price=null. Не передавать произвольный ввод, адрес, имя, контакты, текст ошибки, скриншоты и точную геолокацию. error_code — фиксированный enum.",
+    "В рабочем продукте факты published/accepted/outbid/ended подтверждает сервер; UI отправляет только действия и просмотры. В прототипе их можно было бы брать из reducer и callback. Серверные события не добавлены в рамках этой задачи."
+  ],
+  "events": [
+    {
+      "name": "auction_screen_view",
+      "description": "Просмотр экрана или значимого состояния.",
+      "trigger": "Экран стал видимым; повтор только после смены screen_id/state.",
+      "parameters": "previous_screen_id, entry_point; screen_id — идентификатор логического экрана, не каждого скриншота",
+      "source": "client"
+    },
+    {
+      "name": "auction_role_switch",
+      "description": "Переключение учебной роли.",
+      "trigger": "Разрешённое изменение seller ↔ buyer. Не отправлять при pending.",
+      "parameters": "from_role, to_role, entry_point=role_switch|seller_preview, preserved_status",
+      "source": "client"
+    },
+    {
+      "name": "auction_setup_start",
+      "description": "Начало настройки аукциона.",
+      "trigger": "Переход S01 → S02 по CTA; один flow_id до публикации/сброса.",
+      "parameters": "entry_point=listing, draft_id",
+      "source": "client"
+    },
+    {
+      "name": "auction_terms_change",
+      "description": "Изменение условий.",
+      "trigger": "Blur цены при изменении значения; change шага или срока. Не каждое нажатие клавиши.",
+      "parameters": "field=start_price|step|duration, valid, value — только допустимое число; без raw_input",
+      "source": "client"
+    },
+    {
+      "name": "auction_terms_invalid",
+      "description": "Ошибка проверки цены продавца.",
+      "trigger": "Submit настройки отклонён.",
+      "parameters": "field=start_price, error_code=invalid_integer|out_of_range|empty, min_price=100000, max_price=1000000000",
+      "source": "client"
+    },
+    {
+      "name": "auction_terms_review",
+      "description": "Переход к проверке валидных условий.",
+      "trigger": "Успешная проверка S02 → S04.",
+      "parameters": "start_price, bid_step, duration_hours, currency=RUB",
+      "source": "client"
+    },
+    {
+      "name": "auction_terms_edit",
+      "description": "Возврат к редактированию условий.",
+      "trigger": "«Изменить условия» или «Назад» на проверке.",
+      "parameters": "entry_point=edit_link|back, consent_checked",
+      "source": "client"
+    },
+    {
+      "name": "auction_terms_consent",
+      "description": "Изменение подтверждения условий.",
+      "trigger": "Пользователь ставит или снимает флажок.",
+      "parameters": "checked, start_price, bid_step, duration_hours",
+      "source": "client"
+    },
+    {
+      "name": "auction_publish_click",
+      "description": "Намерение опубликовать.",
+      "trigger": "Разрешённый клик «Опубликовать» при отмеченном согласии.",
+      "parameters": "draft_id, start_price, bid_step, duration_hours, consent_checked=true",
+      "source": "client"
+    },
+    {
+      "name": "auction_published",
+      "description": "Аукцион действительно опубликован.",
+      "trigger": "Успешное создание active-аукциона в reducer; в продукте — серверное подтверждение.",
+      "parameters": "auction_id, draft_id, start_price, bid_step, duration_hours, ends_at",
+      "source": "domain / future server"
+    },
+    {
+      "name": "auction_rules_open",
+      "description": "Просмотр правил механики.",
+      "trigger": "Открытие общего диалога правил.",
+      "parameters": "entry_point=listing_link|auction_link|header_info",
+      "source": "client"
+    },
+    {
+      "name": "auction_modal_close",
+      "description": "Закрытие диалога.",
+      "trigger": "Диалог действительно закрылся; pending-клик не считается.",
+      "parameters": "modal=rules|bid|contact, stage=amount|confirm|error|content, close_method=button|escape|done; backdrop сейчас не закрывает",
+      "source": "client"
+    },
+    {
+      "name": "auction_bid_open",
+      "description": "Открытие формы первой или следующей ставки.",
+      "trigger": "CTA ставки открывает модальное окно.",
+      "parameters": "bid_kind=first|raise, min_bid, current_price, bid_step",
+      "source": "client"
+    },
+    {
+      "name": "auction_bid_amount_change",
+      "description": "Редактирование суммы.",
+      "trigger": "Blur изменённого поля; не отправлять сырую строку.",
+      "parameters": "valid_format, amount — только валидное целое, min_bid",
+      "source": "client"
+    },
+    {
+      "name": "auction_bid_minimum_apply",
+      "description": "Применение предложенного минимума.",
+      "trigger": "Клик «Указать …» меняет поле.",
+      "parameters": "min_bid, amount, had_error",
+      "source": "client"
+    },
+    {
+      "name": "auction_bid_invalid",
+      "description": "Ставка не прошла локальную/повторную проверку.",
+      "trigger": "Отклонение на «Продолжить», перед отправкой или на проверке ответа.",
+      "parameters": "error_code=invalid_integer|below_minimum|auction_ended|not_active, validation_stage=review|submit|response, min_bid, amount — только число",
+      "source": "client"
+    },
+    {
+      "name": "auction_bid_review",
+      "description": "Показ подтверждения суммы.",
+      "trigger": "Валидное «Продолжить» открыло подтверждение.",
+      "parameters": "amount, min_bid, bid_step, bid_kind=first|raise",
+      "source": "client"
+    },
+    {
+      "name": "auction_bid_edit",
+      "description": "Возврат к вводу суммы.",
+      "trigger": "Клик «Изменить сумму» в подтверждении/ошибке.",
+      "parameters": "from_stage=confirm|error, amount",
+      "source": "client"
+    },
+    {
+      "name": "auction_bid_submit",
+      "description": "Первая отправка ставки.",
+      "trigger": "После успешной проверки перед переходом в pending. Повторные клики заблокированы.",
+      "parameters": "bid_flow_id, logical_bid_id, attempt_id, attempt_number=1, amount, min_bid",
+      "source": "client"
+    },
+    {
+      "name": "auction_bid_failed",
+      "description": "Ошибка имитации сетевого ответа.",
+      "trigger": "Pending завершился веткой shouldFail; это не ошибка бизнес-валидации.",
+      "parameters": "bid_flow_id, logical_bid_id, attempt_id, attempt_number, amount, error_code=simulated_connection, latency_ms, retryable=true",
+      "source": "client"
+    },
+    {
+      "name": "auction_bid_retry",
+      "description": "Повтор отправки сохранённой суммы.",
+      "trigger": "Клик «Повторить отправку» прошёл валидацию и начал pending.",
+      "parameters": "bid_flow_id, logical_bid_id, new attempt_id, attempt_number>1, amount, min_bid",
+      "source": "client"
+    },
+    {
+      "name": "auction_bid_accepted",
+      "description": "Ставка добавлена в аукцион.",
+      "trigger": "Успешный reducer bid; в продукте — сервер принял заявку, не момент клика.",
+      "parameters": "bid_id, bid_flow_id, logical_bid_id, attempt_id, amount, latency_ms, bid_count, is_leading=true",
+      "source": "domain / future server"
+    },
+    {
+      "name": "auction_bid_status_view",
+      "description": "Пользователь увидел статус своей ставки.",
+      "trigger": "Статус ≥50% видим ≥1 с; один раз на bid_id + auction_state_version + status за сессию.",
+      "parameters": "bid_id, status=leading|outbid|won|lost, amount, current_price",
+      "source": "client"
+    },
+    {
+      "name": "auction_bid_outbid",
+      "description": "Своя ставка перестала быть лучшей.",
+      "trigger": "Изменение leading → outbid из-за более высокой принятой ставки; не рендер и не каждый просмотр.",
+      "parameters": "previous_leading_bid_id, new_top_bid_id, previous_amount, current_price, update_origin=demo_control|server",
+      "source": "domain / future server"
+    },
+    {
+      "name": "auction_ended",
+      "description": "Факт окончания аукциона.",
+      "trigger": "Единожды на auction_id при переходе active → ended/истечении ends_at. Сервер — источник истины в продукте.",
+      "parameters": "end_reason=timer|demo_control, bid_count, final_price=null при 0 ставок, winner_present",
+      "source": "domain / future server"
+    },
+    {
+      "name": "auction_result_view",
+      "description": "Просмотр финального результата.",
+      "trigger": "Карточка результата ≥50% видима ≥1 с; отдельно по роли и исходу.",
+      "parameters": "outcome=seller_with_bids|no_bids|won|lost|not_participated, bid_count, final_price, own_bid_present",
+      "source": "client"
+    },
+    {
+      "name": "auction_contact_open",
+      "description": "Интерес к следующему шагу.",
+      "trigger": "Открылся контакт продавца/участника. Не означает звонок, сообщение или сделку.",
+      "parameters": "target_role=seller|buyer, entry_point=result, is_placeholder=true, outcome",
+      "source": "client"
+    },
+    {
+      "name": "auction_history_view",
+      "description": "Просмотр истории ставок.",
+      "trigger": "≥50% секции видимо ≥1 с; дедуп по auction_state_version за сессию.",
+      "parameters": "empty, bid_count, highest_amount=null при 0 ставок",
+      "source": "client"
+    },
+    {
+      "name": "auction_photo_change",
+      "description": "Перелистывание фотографий.",
+      "trigger": "Клик стрелки действительно изменил фото.",
+      "parameters": "photo_index=0|1, direction=next|previous, photo_count=2",
+      "source": "client"
+    },
+    {
+      "name": "auction_favorite_change",
+      "description": "Изменение избранного.",
+      "trigger": "Клик переключил сердце.",
+      "parameters": "is_favorite, entry_point=header; состояние только в памяти",
+      "source": "client"
+    },
+    {
+      "name": "auction_notice_dismiss",
+      "description": "Скрытие уведомления.",
+      "trigger": "Клик на крестик активного notice.",
+      "parameters": "notice_code=published|bid_accepted|outbid|ended|demo_opened; без текста",
+      "source": "client"
+    },
+    {
+      "name": "auction_navigation_back",
+      "description": "Возврат из настройки в объявление.",
+      "trigger": "Назад на S02 → S01. Назад на review — auction_terms_edit; стрелка на карточке — rules_open.",
+      "parameters": "from_screen=setup, to_screen=listing",
+      "source": "client"
+    },
+    {
+      "name": "auction_demo_action",
+      "description": "Управление учебным прогоном.",
+      "trigger": "Действие демо реально применилось; не каждый рендер панели.",
+      "parameters": "action=panel_open|panel_close|open_example|competing_bid|end|toggle_failure|reset, enabled, run_id, is_demo=true",
+      "source": "client"
+    }
+  ]
+}

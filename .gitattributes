@@ -1,2 +1,4 @@
 # Keep the extracted snapshot byte-for-byte, including source line endings.
 public/reference/** -text
+*.pdf binary
+*.mp4 binary
