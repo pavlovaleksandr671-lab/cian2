@@ -75,6 +75,7 @@ export function UIKitPage({ prototype = false }: { prototype?: boolean }) {
       </a>
       <header className={s.header}>
         <div className="row">
+          <Link to="/auction">Аукцион квартиры →</Link>
           <span className={s.mark}>Ц</span>
           <strong>
             Циан <span className="muted">/ UI kit</span>
