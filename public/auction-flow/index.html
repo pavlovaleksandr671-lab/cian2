@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ru" class="design-theme--light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Циан · Карта аукциона и аналитика</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23006cfd'/%3E%3Ctext x='7' y='24' font-size='24' fill='white'%3EЦ%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../reference/tokens/tokens.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="data.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="wordmark" aria-label="Циан">Ц<span>циан</span></div>
+      <div class="heading">
+        <p class="eyebrow">ПРОДУКТОВЫЙ РАЗБОР / 23 НОЯБРЯ 2026</p>
+        <h1>Квартира на аукционе</h1>
+        <p>Реальные экраны, сценарии и план аналитики</p>
+      </div>
+      <a class="prototype-link" href="../auction">Открыть прототип ↗</a>
+    </header>
+    <nav class="tabs" aria-label="Разделы исследования">
+      <button data-tab="map" aria-current="page">Карта экранов <span>32</span></button>
+      <button data-tab="metrics">Метрики <span>10</span></button>
+      <button data-tab="events">События <span>33</span></button>
+      <button data-tab="gaps">Пробелы и ограничения</button>
+      <p>Снимок <code>2546d66</code> · аналитика предложена, сбор не подключён</p>
+    </nav>
+    <main>
+      <section id="panel-map" class="panel map-panel" aria-label="Карта экранов">
+        <aside class="screen-index">
+          <div class="index-intro">
+            <h2>Два сценария.<br />Один аукцион.</h2>
+            <p>Выберите экран для приближения. Клик по скриншоту откроет оригинал.</p>
+          </div>
+          <div id="screen-index"></div>
+          <p class="index-foot">
+            32 снимка · мобильный viewport 390 × 900; JPEG 375 × 865.<br />Некоторые узлы —
+            состояния или прокрутка одного экрана.
+          </p>
+        </aside>
+        <div class="map-workspace">
+          <div class="map-toolbar">
+            <div class="role-tools" aria-label="Область карты">
+              <button data-focus="seller" class="active">Продавец</button
+              ><button data-focus="buyer">Покупатель</button
+              ><button data-focus="shared">Общие</button><button id="fit">Вся карта</button>
+            </div>
+            <select id="screen-picker" aria-label="Перейти к экрану">
+              <option value="">Выбрать экран…</option>
+            </select>
+            <div class="zoom-tools" aria-label="Масштаб">
+              <button id="zoom-out" aria-label="Уменьшить масштаб">−</button
+              ><output id="zoom-label" aria-live="polite">100%</output
+              ><button id="zoom-in" aria-label="Увеличить масштаб">+</button
+              ><button id="actual-size">100%</button>
+            </div>
+          </div>
+          <div
+            id="viewport"
+            role="region"
+            tabindex="0"
+            aria-label="Полотно карты. Перетаскивайте для перемещения. Стрелки перемещают, плюс и минус масштабируют, 0 показывает всю карту."
+          >
+            <div id="world">
+              <div id="lanes"></div>
+              <svg id="connections" aria-label="Подписанные переходы между экранами"></svg>
+              <div id="nodes"></div>
+            </div>
+            <div class="map-hint">
+              Перетаскивание — перемещение · Ctrl/⌘ + колесо — масштаб · клик по экрану — оригинал
+            </div>
+          </div>
+          <div class="legend">
+            <span><i class="line"></i>Основной переход</span
+            ><span><i class="line error"></i>Ошибка</span
+            ><span><i class="line dashed"></i>Возврат / вариант</span
+            ><span><i class="line role"></i>Смена роли</span
+            ><span><i class="line demo"></i>Демо / внешнее изменение</span
+            ><span id="image-health" role="status">Проверка снимков…</span>
+          </div>
+        </div>
+      </section>
+      <section id="panel-metrics" class="panel document-panel" hidden>
+        <div class="document-heading">
+          <p class="eyebrow">ЧТО СЧИТАТЬ УСПЕХОМ</p>
+          <h2>От настройки до принятой ставки</h2>
+          <p>
+            Это определения метрик, а не результаты замера. Целевые значения задаются после базового
+            исследования. Все текущие данные учебные.
+          </p>
+        </div>
+        <div class="funnel-summary">
+          <p>
+            <b>Продавец</b>Начал настройку → проверил → подтвердил → опубликовал → изучил результат
+          </p>
+          <p>
+            <b>Покупатель</b>Увидел активный аукцион → открыл форму → подтвердил → ставка принята →
+            увидел статус
+          </p>
+        </div>
+        <div id="metric-list"></div>
+      </section>
+      <section id="panel-events" class="panel document-panel" hidden>
+        <div class="document-heading">
+          <p class="eyebrow">ПЛАН ИЗМЕРЕНИЯ / БЕЗ SDK</p>
+          <h2>Словарь аналитических событий</h2>
+          <p>
+            Существующих правил в авторских исходниках и документации проекта не обнаружено.
+            Предложение использует <code>lower_snake_case</code> и префикс <code>auction_</code>.
+            События на стрелках соответствуют этой таблице.
+          </p>
+          <a href="events.json" download="auction-events.json">Скачать спецификацию JSON ↓</a>
+        </div>
+        <details class="contract" open>
+          <summary>Общая схема, дедупликация и границы данных</summary>
+          <ol id="contract-list"></ol>
+        </details>
+        <div class="table-scroll">
+          <table>
+            <caption>
+              Предлагаемые события: описание, момент срабатывания и параметры
+            </caption>
+            <thead>
+              <tr>
+                <th>Событие / источник</th>
+                <th>Что означает</th>
+                <th>Когда срабатывает</th>
+                <th>Параметры сверх общей схемы</th>
+              </tr>
+            </thead>
+            <tbody id="event-rows"></tbody>
+          </table>
+        </div>
+      </section>
+      <section id="panel-gaps" class="panel document-panel" hidden>
+        <div class="document-heading">
+          <p class="eyebrow">ГРАНИЦЫ ТЕКУЩЕГО ПРОТОТИПА</p>
+          <h2>Что существует, а чего пока нет</h2>
+          <p>
+            Отсутствующие состояния не заменены выдуманными макетами. Основной интерфейс и
+            пользовательская логика сохранены.
+          </p>
+        </div>
+        <div id="gap-list"></div>
+        <details class="method" open>
+          <summary>Источники и метод съёмки</summary>
+          <p>
+            Изучены <code>AuctionPage.tsx</code>, <code>auctionModel.ts</code>, стили, README и
+            документация. AGENTS.md в проекте и родителях отсутствует. Авторские src/docs/tasks/team
+            не содержат трекера или соглашения аналитики.
+          </p>
+          <p>
+            Все 32 изображения сняты в браузере с текущего <code>/auction</code>, через существующие
+            видимые элементы. Настройка мобильного viewport — 390 × 900; браузерная среда возвращает
+            JPEG 375 × 865. Разная прокрутка показывает нужную часть длинного экрана; изображения не
+            являются перерисованными макетами. Состояние React и DOM не подменялись. Временные
+            финалы вызваны существующей кнопкой демо; ожидание 24 часов не выполнялось.
+          </p>
+          <p>
+            Состояния памяти общие у ролей и сбрасываются после обновления страницы. Переключение
+            роли во время ожидания запрещено; черновик продавца сохраняет свой экран при
+            переключении туда и обратно. Карта — статическая документация и не отправляет
+            аналитические данные.
+          </p>
+          <a href="screens/captures.json">Метаданные съёмки ↗</a>
+        </details>
+      </section>
+    </main>
+    <dialog id="screen-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-bar">
+        <p id="dialog-kicker"></p>
+        <button id="close-dialog" aria-label="Закрыть скриншот">✕</button>
+      </div>
+      <div class="dialog-body">
+        <img id="dialog-image" alt="" />
+        <div class="dialog-copy">
+          <h2 id="dialog-title"></h2>
+          <p id="dialog-detail"></p>
+          <p class="eyebrow">КАК ВОСПРОИЗВЕСТИ</p>
+          <p id="dialog-replay"></p>
+          <p class="eyebrow">СОБЫТИЕ / ПРЕДЛОЖЕНО</p>
+          <code id="dialog-event"></code>
+          <p class="dialog-note">
+            Оригинальный скриншот существующего прототипа. Финалы и чужие ставки воспроизведены
+            через демо-панель. Параметры разных прогонов могут различаться.
+          </p>
+          <a id="original-link" target="_blank" rel="noopener">Открыть изображение ↗</a>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>

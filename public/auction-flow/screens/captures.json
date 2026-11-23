@@ -1,0 +1,360 @@
+{
+  "source": "http://127.0.0.1:5175/auction",
+  "sourceCommit": "2546d667e273023c10bf501145285abadbeb3520",
+  "method": "Real browser viewport screenshots; transitions through visible controls only",
+  "screens": [
+    {
+      "id": "s01-listing",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:02.204Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "c01-rules",
+      "kind": "modal",
+      "capturedAt": "2026-11-23T10:33:48.251Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "s02-setup",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:02.659Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "s03-invalid-price",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:02.993Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "s04-review",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:09.084Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "s05-review-ready",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:09.396Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "s06-published-empty",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:09.862Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b01-listing-empty",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:20.455Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b02-conditions-empty",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:20.647Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b03-bid",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:20.952Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b04-invalid-format",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:21.270Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b05-below-minimum",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:21.586Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b06-confirm",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:26.494Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b07-pending",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:26.780Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b08-leading",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:50.453Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "s07-active-bids",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:33.477Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b09-send-error",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:55.451Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b10-retry-pending",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:34:55.729Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b11-outbid",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:01.692Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b12-ended-lost",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:02.160Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "s08-ended-bids",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:02.625Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "s09-contact",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:02.914Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b13-unpublished",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:13.170Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b14-demo-active",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:13.689Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b15-ended-spectator",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:14.189Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "s10-ended-empty",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:37.997Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b16-ended-empty",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:38.478Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b17-ended-won",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:54.794Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "b18-contact",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:55.111Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "c02-gallery-favorite",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:35:56.173Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "c03-demo-controls",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:36:10.733Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    },
+    {
+      "id": "s11-ended-other",
+      "kind": "screen",
+      "capturedAt": "2026-11-23T10:36:12.032Z",
+      "jpegWidth": 375,
+      "jpegHeight": 865,
+      "requestedViewport": {
+        "width": 390,
+        "height": 900
+      }
+    }
+  ],
+  "note": "JPEG resolution is supplied by the browser environment; no image redraw or synthetic screens."
+}
